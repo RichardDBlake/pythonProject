@@ -1,5 +1,7 @@
 # This is a sample Python script.
-
+from gedcom.parser import Parser
+from gedcom.tags import GEDCOM_TAG_OBJECT, GEDCOM_TAG_TITLE, GEDCOM_TAG_FILE, GEDCOM_TAG_FORMAT
+from gedcom.element.element import Element
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
@@ -10,6 +12,16 @@ def print_hi(name):
     for i in range(1, 10):
         if (i in [1, 3]):
             print(i)
+
+
+def create_new_structure(element: Element, structure: str, value: str = "", overwrite: bool = False) -> Element:
+    """ Check of an existing structure exists in this element. Create if it does not."""
+    if element.get_child_element(structure):
+        if overwrite:
+            element.get_child_element(structure).set_value(value)
+        return element.get_child_element(structure)
+    else:
+        return element.new_child_element(tag=structure, value=value)
 
 def fix_mft_objects(gedcom_file: Parser) -> None:
     """ Fix Object records from MFT. """
